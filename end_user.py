@@ -23,7 +23,7 @@ def file_upload():
     # Loading the datasets
     test = pd.read_csv(file_path)
     test.insert(1, column = "target", value = 0)
-    pre_result = test
+    pre_result = test.iloc[:, :2]
     test = test.drop(columns = ['target'])
 
     # Data management on new test data same as training data
@@ -52,12 +52,10 @@ def file_upload():
 
     # Prediction for new test data
     pre_result.target = model.predict(X_test2)
-    
+
     pre_result.to_csv('result.csv',index=False)
     folder_path2 = os.path.join(os.getcwd(), 'result.csv')
-    #return render_template('prediction.html', prediction=folder_path2)
-    pre_result.fillna('-', inplace=True)
-    return render_template('table.html',pre_result=pre_result)
+    return render_template('prediction.html', prediction=folder_path2)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000)
+    app.run(debug=True)
